@@ -9,7 +9,7 @@ import {NhostClient, NhostReactProvider} from '@nhost/react'
 import * as SecureStore from 'expo-secure-store';
 
 const nhost = new NhostClient({
-  backendUrl: 'ysssuqogqcdiyplfllbp',
+  backendUrl: 'https://ysssuqogqcdiyplfllbp.nhost.run',
   clientStorageType: 'expo-secure-storage',
   clientStorage: SecureStore
 })

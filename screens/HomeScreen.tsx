@@ -1,12 +1,41 @@
-import { StyleSheet, Image, ScrollView } from 'react-native';
+
+import { StyleSheet, Alert } from 'react-native';
 import MasonryList from '../components/MasonryList';
-import { Text, View  } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
-import pins from '../assets/data/pins';
+import { useEffect, useState } from 'react';
+import { useNhostClient } from '@nhost/react';
 
 
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+  const nhost = useNhostClient()
+
+  const [pins, setPins] = useState([])
+
+  const fetchPins = async () => {
+    const response = await nhost.graphql.request(`
+    query MyQuery {
+      pins {
+        created_at
+        id
+        image
+        title
+        user_id
+      }
+    }
+    `)
+    if (response.error) {
+      Alert.alert("Error fectching pins")
+    } else {
+      setPins(response.data.pins)
+    }
+    console.log(response)
+  }
+
+  useEffect(() => {
+    fetchPins()
+  }, [])
+
   return (
     
     <MasonryList pins={pins}/>
