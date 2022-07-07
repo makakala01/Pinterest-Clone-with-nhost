@@ -2,12 +2,15 @@ import { View, Text, StyleSheet, Image, Pressable } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 import {useState, useEffect} from 'react'
 import {useNavigation} from '@react-navigation/native'
+import { useNhostClient } from '@nhost/react'
 
 const Pin = (props) => {
   const {id, image, title} = props.pin
+  const  [imageUri, setImageUri] = useState("")
 
   const [ratio, setRatio] = useState(1)
   const navigation = useNavigation()
+  const nhost = useNhostClient()
 
   const onLike = () => {};
 
@@ -15,11 +18,22 @@ const Pin = (props) => {
     navigation.navigate('Pin', {id})
   }
 
+  const fetchImage = async () => {
+    const result = await nhost.storage.getPresignedUrl({
+      fileId: image,
+    })
+    setImageUri(result)
+  }
+
   useEffect(() => {
-    if (image) {
-      Image.getSize(image, (width, height) => setRatio(width / height))
-    }
+    fetchImage()
   }, [image])
+
+  useEffect(() => {
+    if (imageUri) {
+      Image.getSize(imageUri, (width, height) => setRatio(width / height))
+    }
+  }, [imageUri])
 
   return (
     <Pressable onPress={goToPinPage} style={styles.pin}>

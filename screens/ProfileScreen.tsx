@@ -1,4 +1,4 @@
-import { StyleSheet, Image, ScrollView } from 'react-native';
+import { StyleSheet, Image, ScrollView, Pressable } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import MasonryList from '../components/MasonryList';
@@ -6,13 +6,19 @@ import { Text, View } from '../components/Themed';
 import pins from '../assets/data/pins';
 import { Entypo, Feather } from '@expo/vector-icons';
 
+import { useSignOut } from '@nhost/react';
+
 
 export default function TabTwoScreen() {
+  const {signOut} = useSignOut()
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.icons}>
+          <Pressable onPress={signOut}>
             <Feather name="share" size={24} color="black" style={styles.icon} />
+          </Pressable>
             <Entypo name="dots-three-horizontal" size={24} color="black" style={styles.icon} />
         </View>
           {/* <Image 
